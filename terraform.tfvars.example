@@ -1,0 +1,8 @@
+# このファイルを terraform.tfvars にコピーして使う（terraform.tfvars は Git に上げない）
+# 何も書かなくても動く。
+#
+# Gemini API キーはここに書かず、環境変数で渡す:
+#   export TF_VAR_gemini_api_key="..."
+
+# task_cpu    = 2048
+# task_memory = 4096
