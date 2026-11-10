@@ -22,8 +22,10 @@ for f in Dockerfile app.py data/speeches_clustered.csv data/embeddings_round5.np
 done
 
 REPO_URL="$(terraform output -raw ecr_repository_url)"
-REGION="$(terraform output -raw region)"
 REGISTRY="${REPO_URL%%/*}"
+# -target で ECR だけ作った時点では region の output がまだ無いため、URL から取り出す
+# 例: 123456789012.dkr.ecr.ap-northeast-1.amazonaws.com → ap-northeast-1
+REGION="$(echo "$REGISTRY" | cut -d. -f4)"
 
 echo "==> ECR にログイン"
 aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$REGISTRY"
