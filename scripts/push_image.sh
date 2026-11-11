@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # =====================================================================
-# quest_2 のアプリを ARM64 でビルドし、ECR に push する。
+# quest_2 のアプリを ARM64 でビルドし、AWS → GCP 接続用の入口スクリプト（docker/）を
+# 上乗せしてから ECR に push する。
 # ECS サービスが既にあれば、新しいイメージで入れ替える。
 #
 # 使い方（このリポジトリのフォルダで実行）:
@@ -30,8 +31,16 @@ REGION="$(echo "$REGISTRY" | cut -d. -f4)"
 echo "==> ECR にログイン"
 aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$REGISTRY"
 
-echo "==> ARM64 でビルド（初回は 10 分ほどかかります）"
-docker build --platform linux/arm64 -t "$REPO_URL:latest" "$APP_DIR"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+BASE_TAG="dei-rag-base:latest"
+
+echo "==> 1/2 quest_2 のイメージを ARM64 でビルド（初回は 10 分ほどかかります）"
+docker build --platform linux/arm64 -t "$BASE_TAG" "$APP_DIR"
+
+echo "==> 2/2 AWS → GCP 接続用の入口スクリプトを上乗せ（docker/）"
+docker build --platform linux/arm64 \
+  --build-arg BASE_IMAGE="$BASE_TAG" \
+  -t "$REPO_URL:latest" "$SCRIPT_DIR/../docker"
 
 echo "==> push"
 docker push "$REPO_URL:latest"

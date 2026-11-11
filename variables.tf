@@ -60,6 +60,22 @@ variable "gemini_api_key" {
   ephemeral   = true
 }
 
+# ---------------------------------------------------------------
+# 第 2 段階: GCP（quest_2 で手作業で構築した既存の環境）
+# ここで指定する既存リソースは参照するだけで、作成・変更・削除はしない
+# ---------------------------------------------------------------
+variable "gcp_project_id" {
+  description = "quest_2 の GCP プロジェクト ID"
+  type        = string
+  default     = "dei-voice-map"
+}
+
+variable "bq_dataset_id" {
+  description = "検索ログと利用者の声を保存している既存の BigQuery データセット"
+  type        = string
+  default     = "dei_dataset"
+}
+
 variable "gemini_api_key_version" {
   description = "API キーを差し替えるときに 1 ずつ増やす（write-only 属性の更新トリガー）"
   type        = number

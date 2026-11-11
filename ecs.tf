@@ -88,6 +88,13 @@ resource "aws_ecs_task_definition" "app" {
       valueFrom = aws_secretsmanager_secret.gemini.arn
     }]
 
+    # 第 2 段階: BigQuery への接続設定（gcp.tf）。キーは含まない
+    environment = [
+      { name = "GCP_CREDENTIAL_CONFIG", value = jsonencode(local.gcp_credential_config) },
+      { name = "GOOGLE_CLOUD_PROJECT", value = var.gcp_project_id },
+      { name = "AWS_REGION", value = var.region },
+    ]
+
     logConfiguration = {
       logDriver = "awslogs"
       options = {

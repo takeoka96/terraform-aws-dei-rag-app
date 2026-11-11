@@ -7,7 +7,21 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 6.0"
     }
+    # 第 2 段階: AWS から BigQuery に接続するための GCP 側の部品を作る
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 7.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.6"
+    }
   }
+}
+
+# 認証は gcloud auth application-default login で行う
+provider "google" {
+  project = var.gcp_project_id
 }
 
 provider "aws" {
