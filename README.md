@@ -6,6 +6,17 @@
 
 **目的**: 同じコンテナを Cloud Run と AWS の両方で動かし、マネージドなサーバーレス実行環境と、ネットワークから自分で組み立てる構成の違いを比較すること。さらに、AWS で動くアプリから GCP の BigQuery へ、**秘密鍵を使わずに**（Workload Identity 連携）書き込めるようにした。
 
+## デモ（2026 年 12 月末まで公開）
+
+| | URL |
+|---|---|
+| **AWS 版（このリポジトリ）** | http://dei-rag-alb-1470291071.ap-northeast-1.elb.amazonaws.com |
+| Cloud Run 版（quest_2） | https://dei-voice-map-app-117244440892.asia-northeast1.run.app/ |
+
+- AWS 版は費用がかかり続けるため、期間限定で公開しています。終了後は `terraform destroy` で削除し、必要なときに `terraform apply` で再構築します
+- 初回の検索は、埋め込みモデルの読み込みのため 1 分ほどかかります
+- 「あなたの声を聞かせてください」に送信した内容は、Cloud Run 版と同じ BigQuery に保存されます。個人情報は書かないでください
+
 ## 構成図
 
 ```mermaid
